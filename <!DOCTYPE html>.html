@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Theme Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0a192f; /* Deep Navy Blue */
+        }
+
+        .calculator {
+            background-color: #172a45; /* Dark Slate Blue */
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 30, 60, 0.5);
+            width: 340px;
+            border: 1px solid #3066be; /* Medium Blue Border */
+        }
+
+        .display {
+            width: 100%;
+            height: 100px;
+            background-color: #0c1b33; /* Very Dark Blue Screen */
+            border: 1px solid #1e3a8a;
+            border-radius: 12px;
+            outline: none;
+            text-align: right;
+            padding: 20px;
+            font-size: 2.5rem;
+            color: #64ffda; /* Cyan/Electric Blue text for contrast */
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 20px;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #1e3a8a; /* Classic Blue */
+            color: #ffffff;
+        }
+
+        button:hover {
+            background-color: #2563eb; /* Bright Royal Blue on hover */
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Operator buttons color */
+        .operator {
+            background-color: #3b82f6; /* Lighter Sky Blue */
+            color: #ffffff;
+        }
+
+        .operator:hover {
+            background-color: #60a5fa;
+        }
+
+        /* Clear and Delete buttons */
+        .function {
+            background-color: #0284c7; /* Ocean Blue */
+            color: #ffffff;
+        }
+
+        .function:hover {
+            background-color: #38bdf8;
+        }
+
+        /* Equal button takes up two rows */
+        .equal {
+            background-color: #00f5ff; /* Bright Cyan Blue */
+            color: #0a192f; /* Dark text for contrast */
+            grid-row: span 2;
+            height: 100%;
+        }
+
+        .equal:hover {
+            background-color: #33f7ff;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <input type="text" class="display" id="screen" readonly placeholder="0">
+        
+        <div class="buttons">
+            <button class="function" onclick="clearScreen()">C</button>
+            <button class="function" onclick="deleteLast()">DE</button>
+            <button class="operator" onclick="appendValue('/')">÷</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            
+            <button class="equal" onclick="calculate()">=</button>
+
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        const screen = document.getElementById('screen');
+
+        function appendValue(value) {
+            const lastChar = screen.value.slice(-1);
+            const operators = ['+', '-', '*', '/'];
+            
+            if (operators.includes(value) && operators.includes(lastChar)) {
+                screen.value = screen.value.slice(0, -1) + value;
+            } else {
+                screen.value += value;
+            }
+        }
+
+        function clearScreen() {
+            screen.value = '';
+        }
+
+        function deleteLast() {
+            screen.value = screen.value.slice(0, -1);
+        }
+
+        function calculate() {
+            try {
+                if (screen.value.trim() !== "") {
+                    screen.value = Function('"use strict";return (' + screen.value + ')')();
+                }
+            } catch (error) {
+                screen.value = 'Error';
+                setTimeout(clearScreen, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
